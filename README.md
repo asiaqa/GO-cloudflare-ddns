@@ -41,6 +41,8 @@ This command will update the DNS record  home.example.com  with the current IPv6
 
 ```
 crontab -e
+```
+```
 @reboot sleep 60 && /path/to/output/go-cf-ddns -k "YOUR_API_KEY" -d "DDNS_RECORD_NAME"
 21 8.20 * * * /path/to/output/go-cf-ddns -k "YOUR_API_KEY" -d "DDNS_RECORD_NAME"
 ```
