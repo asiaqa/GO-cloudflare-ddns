@@ -1,0 +1,40 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+# optional: 
+name: go-builder
+on: 
+ workflow_dispatch: 
+
+jobs:        
+  releases-matrix:
+    name: Release Go Binary
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # build and publish in parallel: linux/386, linux/amd64, linux/arm64, windows/386, windows/amd64, darwin/amd64, darwin/arm64
+        goos: [linux, windows]
+        goarch: [amd64, arm64, mips, mipsle]
+        exclude:
+          - goarch: mips
+            goos: windows
+          - goarch: mipsle
+            goos: windows
+          - goarch: arm64
+            goos: windows
+    steps:
+    - uses: actions/checkout@v3
+    - name: Cloning repo
+      run: |
+        go mod init go-scanner
+    - uses: wangyoucao577/go-release-action@v1.34
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        goos: ${{ matrix.goos }}
+        goarch: ${{ matrix.goarch }}
+        ldflags: "-s -w -buildid="
+        overwrite: true
+        release_name: "latest" 
+        executable_compression: "upx --ultra-brute"
+        compress_assets: "AUTO"
+        build_flags: "-trimpath"
+        asset_name: "ipv6-cf-ddns-${{ matrix.goos }}-${{ matrix.goarch }}"
