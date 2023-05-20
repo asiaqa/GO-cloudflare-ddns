@@ -13,7 +13,7 @@ This program updates a `Cloudflare DNS` entry with the current `IPv6` address of
  
 1. Clone the repository to your local machine:
 ```
-git clone https://github.com/yourusername/go-cf-ddns.git
+git clone https://github.com/asiaqa/GO-cloudflare-ddns.git
 ```
 2. Build the binary file:
 ```
