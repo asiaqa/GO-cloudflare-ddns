@@ -1,6 +1,6 @@
 # Cloudflare DDNS Updater 
  
-This program updates a Cloudflare DNS entry with the current *IPv6* address of the machine it is running on. It is useful for keeping DNS records up-to-date with dynamic IP addresses. 
+This program updates a ==Cloudflare DNS== entry with the current ==IPv6== address of the machine it is running on. It is useful for keeping DNS records up-to-date with dynamic IP addresses. 
  
 ## Getting Started 
  
@@ -28,7 +28,7 @@ Replace  YOUR_API_KEY  with your Cloudflare API key and  DDNS_RECORD_NAME  with 
 ```
 ./go-cf-ddns -k "1234567890abcdefghijklm" -d "home.example.com"
 ```
-This command will update the DNS record  home.example.com  with the current IPv6 address of the machine it is running on. 
+This command will update the DNS record  home.example.com  with the current IPv6 address of the machine it is running on. please make the script run after reboot and run periodically 
  
 ## Contributing 
  
