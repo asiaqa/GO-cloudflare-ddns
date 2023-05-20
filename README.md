@@ -35,7 +35,7 @@ Replace  YOUR_API_KEY  with your Cloudflare API key and  DDNS_RECORD_NAME  with 
  
 ## Example
 ```
-./go-cf-ddns -k "1234567890abcdefghijklm" -d "home.example.com"
+chmod +x ./go-cf-ddns && ./go-cf-ddns -k "1234567890abcdefghijklm" -d "home.example.com"
 ```
 This command will update the DNS record  home.example.com  with the current IPv6 address of the machine it is running on. please make a script run after reboot and / or run periodically 
  
