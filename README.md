@@ -12,10 +12,19 @@ This program updates a `Cloudflare DNS` entry with the current `IPv6` address of
 ### Installation 
  
 1. Clone the repository to your local machine:
+```
 git clone https://github.com/yourusername/go-cf-ddns.git
+```
 2. Build the binary file:
+```
 cd go-cf-ddns
-   go build -o go-cf-ddns main.go
+go build -o go-cf-ddns main.go
+```
+OR
+Just download from the release, Here is the example for linux-amd64
+```
+wget https://github.com/asiaqa/GO-cloudflare-ddns/releases/latest/download/ipv6-cf-ddns-linux-amd64 -O /path/to/output/go-cf-ddns
+```
 ## Usage 
  
 To run the program, use the following command:
