@@ -35,6 +35,6 @@ jobs:
         overwrite: true
         release_name: "ipv6-cf-ddns" 
         executable_compression: "upx --ultra-brute"
-        compress_assets: "AUTO"
+        compress_assets: "OFF"
         build_flags: "-trimpath"
         asset_name: "ipv6-cf-ddns-${{ matrix.goos }}-${{ matrix.goarch }}"
