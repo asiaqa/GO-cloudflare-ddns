@@ -47,7 +47,16 @@ crontab -e
 21 8.20 * * * /path/to/output/go-cf-ddns -k "YOUR_API_KEY" -d "DDNS_RECORD_NAME"
 ```
 Example of how to use crontab -e to run the script after reboot and 0821, 2021 everyday
- 
+
+## REMARK
+
+If your machine is under NAT device, please run the below code or open ipv6 port forward (I have never heard that in normal NAT device)
+
+```
+ip6tables -I FORWARD -p tcp --dport #### -j ACCEPT
+ip6tables -I FORWARD -p udp --dport #### -j ACCEPT
+```
+
 ## Contributing 
  
 Feel free to open an issue or submit a pull request if you find any issue, bug, or have a feature request for this project. 
