@@ -1,6 +1,6 @@
 # Cloudflare DDNS Updater 
  
-This program updates a Cloudflare DNS entry with the current IPv6 address of the machine it is running on. It is useful for keeping DNS records up-to-date with dynamic IP addresses. 
+This program updates a Cloudflare DNS entry with the current *IPv6* address of the machine it is running on. It is useful for keeping DNS records up-to-date with dynamic IP addresses. 
  
 ## Getting Started 
  
