@@ -33,7 +33,7 @@ jobs:
         goarch: ${{ matrix.goarch }}
         ldflags: "-s -w -buildid="
         overwrite: true
-        release_name: "ipv6-cf-ddns" 
+        release_name: "ip-cf-ddns" 
         executable_compression: "upx --ultra-brute"
         compress_assets: "OFF"
         build_flags: "-trimpath"
