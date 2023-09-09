@@ -26,7 +26,7 @@ jobs:
     - name: Cloning repo
       run: |
         go mod init go-scanner
-    - uses: wangyoucao577/go-release-action@v1.34
+    - uses: wangyoucao577/go-release-action@v1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
@@ -37,4 +37,4 @@ jobs:
         executable_compression: "upx --ultra-brute"
         compress_assets: "OFF"
         build_flags: "-trimpath"
-        asset_name: "ipv6-cf-ddns-${{ matrix.goos }}-${{ matrix.goarch }}"
+        asset_name: "ip-cf-ddns-${{ matrix.goos }}-${{ matrix.goarch }}"
