@@ -23,7 +23,7 @@ go build -o go-cf-ddns main.go
 OR
 Just download from the release, Here is the example for linux-amd64
 ```
-wget https://github.com/asiaqa/GO-cloudflare-ddns/releases/latest/download/ipv6-cf-ddns-linux-amd64 -O /path/to/output/go-cf-ddns
+wget https://github.com/asiaqa/GO-cloudflare-ddns/releases/latest/download/ip-cf-ddns-linux-amd64 -O /path/to/output/go-cf-ddns
 ```
 ## Usage 
  
@@ -35,7 +35,7 @@ Replace  YOUR_API_KEY  with your Cloudflare API key and DDNS_RECORD_NAME  with t
 
 ## Example
 ```
-chmod +x ./go-cf-ddns && ./go-cf-ddns -k "1234567890abcdefghijklm" -d "home.example.com -m 120"
+chmod +x ./go-cf-ddns && ./go-cf-ddns -k "1234567890abcdefghijklm" -d "home.example.com" -m 120
 ```
 This command will update the DNS record  home.example.com  with the current IPv6 address of the machine it is running on, and check in every 120 mins, please make a script run after reboot 
 
