@@ -61,7 +61,13 @@ func handleError(errMsg string) {
 
 func getZoneName(ddnsRecordName string) string {
 	splitDomain := strings.Split(ddnsRecordName, ".")
-	return fmt.Sprintf("%s.%s", splitDomain[1], splitDomain[2])
+	length := len(splitDomain)
+	if length == 3 {
+		return fmt.Sprintf("%s.%s", splitDomain[1], splitDomain[2])
+	} else {
+		return fmt.Sprintf("%s.%s.%s", splitDomain[1], splitDomain[2], splitDomain[3])
+	}
+
 }
 
 func getZoneID(apiKey, zoneName string) string {
@@ -165,7 +171,7 @@ var lastIPv4Address string
 func main() {
 	apiKey := flag.String("k", "", "Cloudflare API key")
 	ddnsRecordName := flag.String("d", "", "DDNS record name")
-	monitorInterval := flag.Duration("m", 60, "Monitoring interval")
+	monitorInterval := flag.Int("m", 60, "Monitoring interval in minutes")
 	flag.Parse()
 	lastIPv6Address = ""
 	lastIPv4Address = ""
@@ -185,6 +191,29 @@ func main() {
 			handleError("API key or DDNS record name not provided")
 		}
 
+		if ipv4Address != lastIPv4Address {
+			zoneName := getZoneName(*ddnsRecordName)
+			zoneID := getZoneID(*apiKey, zoneName)
+			recordID := getRecordID(*apiKey, zoneID, *ddnsRecordName)
+			if err != nil {
+				handleError(fmt.Sprintf("Error retrieving A record: %v", err))
+			}
+			if recordID != "" {
+				recordContent, _ := getARecord(*apiKey, zoneID, *ddnsRecordName)
+				if recordContent != ipv4Address {
+					updateDNSRecordIPv4(*apiKey, zoneID, recordID, *ddnsRecordName, ipv4Address)
+					fmt.Println("IPv4 DNS record updated successfully, ip:", ipv4Address)
+				} else {
+					fmt.Println("IPv4 DNS record has not updated, ip:", ipv4Address)
+				}
+
+			} else {
+				createDNSRecordIPv4(*apiKey, zoneID, *ddnsRecordName, ipv4Address)
+				fmt.Println("IPv4 DNS record created successfully, ip:", ipv4Address)
+			}
+
+			lastIPv4Address = ipv4Address
+		}
 		if ipv6Address != lastIPv6Address {
 			zoneName := getZoneName(*ddnsRecordName)
 			zoneID := getZoneID(*apiKey, zoneName)
@@ -199,30 +228,6 @@ func main() {
 			}
 
 			lastIPv6Address = ipv6Address
-		}
-
-		if ipv4Address != lastIPv4Address {
-			zoneName := getZoneName(*ddnsRecordName)
-			zoneID := getZoneID(*apiKey, zoneName)
-			recordID := getRecordID(*apiKey, zoneID, *ddnsRecordName)
-			recordContent, err := getARecord(*apiKey, zoneID, *ddnsRecordName)
-			if err != nil {
-				handleError(fmt.Sprintf("Error retrieving A record: %v", err))
-			}
-			if recordID != "" {
-				if recordContent != ipv4Address {
-					updateDNSRecordIPv4(*apiKey, zoneID, recordID, *ddnsRecordName, ipv4Address)
-					fmt.Println("IPv4 DNS record updated successfully, ip:", ipv4Address)
-				} else {
-					fmt.Println("IPv4 DNS record has not updated, ip:", ipv4Address)
-				}
-
-			} else {
-				createDNSRecordIPv4(*apiKey, zoneID, *ddnsRecordName, ipv4Address)
-				fmt.Println("IPv4 DNS record created successfully, ip:", ipv4Address)
-			}
-
-			lastIPv4Address = ipv4Address
 		}
 		writeToLog("Current: IPV4: " + lastIPv4Address + " Current: IPV6: " + lastIPv6Address)
 		fmt.Println("Check IPv6 and IPv4 again in", time.Duration(*monitorInterval)*time.Minute)
