@@ -165,7 +165,7 @@ var lastIPv4Address string
 func main() {
 	apiKey := flag.String("k", "", "Cloudflare API key")
 	ddnsRecordName := flag.String("d", "", "DDNS record name")
-	monitorInterval := flag.Duration("m", 60*time.Minute, "Monitoring interval")
+	monitorInterval := flag.Duration("m", 60, "Monitoring interval")
 	flag.Parse()
 	lastIPv6Address = ""
 	lastIPv4Address = ""
@@ -225,7 +225,7 @@ func main() {
 			lastIPv4Address = ipv4Address
 		}
 		writeToLog("Current: IPV4: " + lastIPv4Address + " Current: IPV6: " + lastIPv6Address)
-		fmt.Println("Check IPv6 and IPv4 again in", *monitorInterval)
-		time.Sleep(*monitorInterval)
+		fmt.Println("Check IPv6 and IPv4 again in", time.Duration(*monitorInterval)*time.Minute)
+		time.Sleep(time.Duration(*monitorInterval) * time.Minute)
 	}
 }
