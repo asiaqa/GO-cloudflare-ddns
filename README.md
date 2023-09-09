@@ -29,15 +29,15 @@ wget https://github.com/asiaqa/GO-cloudflare-ddns/releases/latest/download/ipv6-
  
 To run the program, use the following command:
 ```
-./go-cf-ddns -k "YOUR_API_KEY" -d "DDNS_RECORD_NAME"
+./go-cf-ddns -k "YOUR_API_KEY" -d "DDNS_RECORD_NAME" -m "min"
 ```
-Replace  YOUR_API_KEY  with your Cloudflare API key and  DDNS_RECORD_NAME  with the desired DNS record name (e.g.,  home.example.com ). Yo
+Replace  YOUR_API_KEY  with your Cloudflare API key and DDNS_RECORD_NAME  with the desired DNS record name (e.g.,  home.example.com ) and duration of checking in min (default: 60)
 
 ## Example
 ```
 chmod +x ./go-cf-ddns && ./go-cf-ddns -k "1234567890abcdefghijklm" -d "home.example.com -m 120"
 ```
-This command will update the DNS record  home.example.com  with the current IPv6 address of the machine it is running on. please make a script run after reboot and / or run periodically 
+This command will update the DNS record  home.example.com  with the current IPv6 address of the machine it is running on, and check in every 120 mins, please make a script run after reboot 
 
 ```
 crontab -e
