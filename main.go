@@ -56,7 +56,6 @@ func writeToLog(result string) {
 func handleError(errMsg string) {
 	fmt.Fprintln(os.Stderr, errMsg)
 	writeToLog(errMsg)
-	os.Exit(1)
 }
 
 func getZoneName(ddnsRecordName string) string {
@@ -67,7 +66,6 @@ func getZoneName(ddnsRecordName string) string {
 	} else {
 		return fmt.Sprintf("%s.%s.%s", splitDomain[1], splitDomain[2], splitDomain[3])
 	}
-
 }
 
 func getZoneID(apiKey, zoneName string) string {
@@ -146,6 +144,7 @@ func makeRequest(method, url, apiKey string, requestBody []byte) []byte {
 	req, err := http.NewRequest(method, url, bytes.NewBuffer(requestBody))
 	if err != nil {
 		handleError(fmt.Sprintf("Failed to create request: %v", err))
+		return nil
 	}
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", apiKey))
 	req.Header.Add("Content-Type", "application/json")
@@ -153,14 +152,17 @@ func makeRequest(method, url, apiKey string, requestBody []byte) []byte {
 	resp, err := client.Do(req)
 	if err != nil {
 		handleError(fmt.Sprintf("Failed to make request: %v", err))
+		return nil
 	}
 	defer resp.Body.Close()
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
 		handleError(fmt.Sprintf("Failed to read response body: %v", err))
+		return nil
 	}
 	if resp.StatusCode != 200 {
 		handleError(fmt.Sprintf("Request failed with status code %d\nResponse Body: %s", resp.StatusCode, respBody))
+		return nil
 	}
 	return respBody
 }
@@ -175,22 +177,18 @@ func main() {
 	flag.Parse()
 	lastIPv6Address = ""
 	lastIPv4Address = ""
-
 	for {
 		ipv6Address, err := getIPv6()
 		if err != nil {
 			handleError(fmt.Sprintf("Error getting IPv6 address: %v", err))
 		}
-
 		ipv4Address, err := getIPv4()
 		if err != nil {
 			handleError(fmt.Sprintf("Error getting IPv4 address: %v", err))
 		}
-
 		if *apiKey == "" || *ddnsRecordName == "" {
 			handleError("API key or DDNS record name not provided")
 		}
-
 		if ipv4Address != lastIPv4Address {
 			zoneName := getZoneName(*ddnsRecordName)
 			zoneID := getZoneID(*apiKey, zoneName)
@@ -206,19 +204,16 @@ func main() {
 				} else {
 					fmt.Println("IPv4 DNS record has not updated, ip:", ipv4Address)
 				}
-
 			} else {
 				createDNSRecordIPv4(*apiKey, zoneID, *ddnsRecordName, ipv4Address)
 				fmt.Println("IPv4 DNS record created successfully, ip:", ipv4Address)
 			}
-
 			lastIPv4Address = ipv4Address
 		}
 		if ipv6Address != lastIPv6Address {
 			zoneName := getZoneName(*ddnsRecordName)
 			zoneID := getZoneID(*apiKey, zoneName)
 			recordID := getRecordID(*apiKey, zoneID, *ddnsRecordName)
-
 			if recordID != "" {
 				updateDNSRecord(*apiKey, zoneID, recordID, *ddnsRecordName, ipv6Address)
 				fmt.Println("IPv6 DNS record updated successfully, ip:", ipv6Address)
@@ -226,7 +221,6 @@ func main() {
 				createDNSRecord(*apiKey, zoneID, *ddnsRecordName, ipv6Address)
 				fmt.Println("IPv6 DNS record created successfully, ip:", ipv6Address)
 			}
-
 			lastIPv6Address = ipv6Address
 		}
 		writeToLog("Current: IPV4: " + lastIPv4Address + " Current: IPV6: " + lastIPv6Address)
