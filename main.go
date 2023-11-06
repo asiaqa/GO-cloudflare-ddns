@@ -26,7 +26,7 @@ func getIPv4() (string, error) {
 }
 
 func getIPv6() (string, error) {
-	resp, err := http.Get("https://api6.ipify.org")
+	resp, err := http.Get("https://ipv6.duiadns.net/")
 	if err != nil {
 		return "", fmt.Errorf("Unable to get IPv6 address: %v", err)
 	}
